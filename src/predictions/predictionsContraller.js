@@ -88,6 +88,22 @@ module.exports.getInputsForOptimization = function (req, res) {
  * @param {*} req               
  * @param {*} res 
  */
+module.exports.getInputsForPrediction = function (req, res) {
+    //call add post to the database method
+    service.getInputsForPrediction(res, function (data) {
+        if (data.status) {
+            return response.successWithData(data.data, res);
+        } else {
+            return response.customError(data.data, res);
+        }
+    })
+};
+
+/**
+ * Get All doctors from the system
+ * @param {*} req               
+ * @param {*} res 
+ */
 module.exports.getNextWeekFreeNurseCount = function (req, res) {
     //call add post to the database method
     service.getNextWeekFreeNurseCount(req, res, function (data) {

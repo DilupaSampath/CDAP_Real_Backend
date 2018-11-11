@@ -234,7 +234,25 @@ module.exports.getInputsForOptimization = function (body, res, callBack) {
 
 
 };
+/**
+ * get all nurses from the database
+ * @param {*} user_id 
+ * @param {*} res 
+ * @param {*} callBack 
+ */
+module.exports.getInputsForPrediction= function (res, callBack) {
+    //check User is on the database
+    var ward1;
+    var ward2;
+    var ward3;
+predictionModel.find({algorithmNo:1},function(error,data){
+    console.log(data);
 
+    callBack(callBackResponse.callbackWithData(data[0].oldCount));
+});
+
+
+};
 function excel(){
        var inputs = [
                         {ward1: 50, ward2: 50,ward3:78},

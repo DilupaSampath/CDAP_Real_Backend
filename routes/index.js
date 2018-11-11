@@ -23,6 +23,7 @@ const nurseContraller = require('../src/nurse/nurseContraller');
 const patientContraller = require('../src/patient/patientContraller');
 const algorithmsContraller = require('../src/algorithms/algorithmsContraller');
 const predictionsContraller = require('../src/predictions/predictionsContraller');
+const userContraller = require('../src/user/userContraller');
 
 //doctor routes
 router.route('/api/doctor/new').post(validator.validateBody(doctorSchema.newDoctor) ,doctorContraller.addDoctor);
@@ -54,6 +55,7 @@ router.route('/api/predictions/update').post(predictionsContraller.updatePredict
 router.route('/api/predictions/remove').post(predictionsContraller.removePredictionsByTypeAndAlgirithm);
 router.route('/api/predictions/new').post(predictionsContraller.newPredictions);
 router.route('/api/predictions/getInputsForOptimization').get(predictionsContraller.getInputsForOptimization);
+router.route('/api/predictions/getInputsForPrediction').get(predictionsContraller.getInputsForPrediction);
 router.route('/api/predictions/getNextWeekFreeNurseCount').get(predictionsContraller.getNextWeekFreeNurseCount);
 
 //Algorithm routes
@@ -64,4 +66,8 @@ router.route('/api/algorithm/getAll').get(algorithmsContraller.getAllAlgorithms)
 router.route('/api/algorithm/compairPastData').post(algorithmsContraller.compairPastData);
 router.route('/api/algorithm/addData').post(algorithmsContraller.addData);
 
+
+
+router.route('/api/user/createUser').post(userContraller.createUser);
+router.route('/api/user/loginUser').post(userContraller.loginUser);
 module.exports = router;
