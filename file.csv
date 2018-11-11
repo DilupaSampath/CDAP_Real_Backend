@@ -1,0 +1,6 @@
+Total,Name
+"data","fields","hasCSVColumnTitle"
+"[{""Total"":""100"",""Name"":""myName1""},{""Total"":""200"",""Name"":""myName2""}]","[""Total"",""Name""]",false
+"Total","Name"
+"100","myName1"
+"200","myName2"
