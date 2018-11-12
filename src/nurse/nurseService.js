@@ -3,12 +3,15 @@
 const nurseModel = require('../nurse/nurseModel');
 const nurseWorkingModel = require('../nurse/nurseWorkingModel');
 const callBackResponse = require('../../services/callBackResponseService');
+const fs = require('fs');
+const json2csv = require('json2csv');
+const Json2csvParser = require('json2csv').Parser;
 
 /**
  * 
  */
 module.exports.newNurse = function (body, res, callBack) {
-  
+ 
     //check User is on the database
     nurseModel.find({ NIC: body.NIC }, function (error, user) {
    
@@ -23,7 +26,77 @@ module.exports.newNurse = function (body, res, callBack) {
                 if (err) {
                     callBack(callBackResponse.callbackWithDefaultError());
                 } else {
-                    callBack(callBackResponse.callbackWithData(nurse));
+                    const bodyRes=[];
+                    const items = ["OT","Allowed"]
+                    // callBack(callBackResponse.callbackWithData(nurse));
+nurseModel.find({}, { NIC: 1},function(err,dataResult){
+
+    dataResult.forEach(function(element) {
+        bodyRes.push(
+{
+    "Nurses":element.NIC,
+    "Shift":items[Math.floor(Math.random()*items.length)]
+}
+
+       );     
+    
+}, this);
+
+});
+
+    //check User is on the database
+
+    var object = [];
+    const csvFilePath = 'nurses.csv'
+    const csv = require('csvtojson')
+    var newLine = "\r\n";
+    csv()
+        .fromFile(csvFilePath)
+        .then((jsonObj) => {
+
+            object = jsonObj;
+        }).then(function () {
+          
+
+
+const fields = ['Nuesrs', 'Shift'];
+        var appendThis = bodyRes;
+
+        var toCsv = {
+            data: appendThis,
+            hasCSVColumnTitle: false
+        };
+
+        fs.stat('nurses.csv', function (err, stat) {
+            try {
+                if (err == null) {
+
+    const json2csvParser = new Json2csvParser();
+    const csv = json2csvParser.parse(appendThis);
+
+
+                    fs.writeFile('nurses.csv', csv, function (err) {
+
+                       console.log('OK');
+                       callBack(callBackResponse.callbackWithSucessMessage("data added to prediction table"));
+                     });
+                }
+
+
+                else {
+
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+
+        });
+
+
+        });
+   
+
                 }
             });
 

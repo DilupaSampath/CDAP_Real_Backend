@@ -57,6 +57,7 @@ router.route('/api/predictions/new').post(predictionsContraller.newPredictions);
 router.route('/api/predictions/getInputsForOptimization').get(predictionsContraller.getInputsForOptimization);
 router.route('/api/predictions/getInputsForPrediction').get(predictionsContraller.getInputsForPrediction);
 router.route('/api/predictions/getNextWeekFreeNurseCount').get(predictionsContraller.getNextWeekFreeNurseCount);
+router.route('/api/predictions/getSchedules').get(predictionsContraller.getSchedules);
 
 //Algorithm routes
 router.route('/api/algorithm/new').post(algorithmsContraller.addAlgorithm);

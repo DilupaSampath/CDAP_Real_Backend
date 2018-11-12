@@ -68,6 +68,182 @@ module.exports.removePredictions = function (patient_id, res, callBack) {
 };
 
 
+/**
+ * delete doctor from the database
+ * @param {*} user_id 
+ * @param {*} res 
+ * @param {*} callBack 
+ */
+module.exports.getSchedules = function (patient_id, res, callBack) {
+    //check User is on the database
+    var resultNew=[];
+    var resultOld=[];
+    resultNew = [{"ward1":[{"nurseId":"nurse5","workingStatus":"Allowed"},{"nurseId":"nurse7","workingStatus":"OT"},{"nurseId":"nurse17","workingStatus":"Allowed"},{"nurseId":"nurse12","workingStatus":"Allowed"},{"nurseId":"nurse3","workingStatus":"OT"},{"nurseId":"nurse20","workingStatus":"OT"},{"nurseId":"nurse19","workingStatus":"Allowed"},{"nurseId":"nurse2","workingStatus":"Allowed"}],"ward2":[{"nurseId":"nurse6","workingStatus":"OT"},{"nurseId":"nurse10","workingStatus":"OT"},{"nurseId":"nurse9","workingStatus":"Allowed"},{"nurseId":"nurse18","workingStatus":"OT"},{"nurseId":"nurse16","workingStatus":"Allowed"},{"nurseId":"nurse1","workingStatus":"OT"}],"ward3":[{"nurseId":"nurse14","workingStatus":"Allowed"},{"nurseId":"nurse4","workingStatus":"Allowed"},{"nurseId":"nurse11","workingStatus":"OT"},{"nurseId":"nurse15","workingStatus":"OT"},{"nurseId":"nurse13","workingStatus":"OT"},{"nurseId":"nurse8","workingStatus":"Allowed"}]}];
+    resultOld = [{
+        "ward1": [{
+                "nurseId": "nurse5",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse14",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse3",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse11",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse17",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse6",
+                "workingStatus": "OT"
+            },
+            {
+                "nurseId": "nurse8",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse2",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse13",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse4",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse16",
+                "workingStatus": "OT"
+            },
+            {
+                "nurseId": "nurse7",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse9",
+                "workingStatus": "OT"
+            },
+            {
+                "nurseId": "nurse15",
+                "workingStatus": "Allowed"
+            }
+        ],
+        "ward2": [{
+                "nurseId": "nurse12",
+                "workingStatus": "OT"
+            },
+            {
+                "nurseId": "nurse1",
+                "workingStatus": "OT"
+            },
+            {
+                "nurseId": "nurse19",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse18",
+                "workingStatus": "Allowed"
+            }
+        ],
+        "ward3": [{
+                "nurseId": "nurse21",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse20",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse10",
+                "workingStatus": "Allowed"
+            },
+            {
+                "nurseId": "nurse22",
+                "workingStatus": "Allowed"
+            }
+        ]
+    }];
+    predictionModel.find({ algorithmNo: '4'}, function (error, pred) {
+    
+        if (pred.length == 0) {
+            callBack(callBackResponse.callbackWithfalseMessage('Predictions  Not Found'));
+        } else {
+            //delete User from the database
+          
+         var temp1 =  setData(resultNew );
+                console.log(resultNew);
+                var newSchedule = {
+                    ward1:temp1[0].ward1,
+                    ward2:temp1[1].ward2,
+                    ward3:temp1[2].ward3
+                }
+            
+                var temp2 = setData(resultOld );
+                console.log(resultOld);
+                var oldwSchedule = {
+                    ward1:temp2[0].ward1,
+                    ward2:temp2[1].ward2,
+                    ward3:temp2[2].ward3
+                }
+            
+         
+           
+            var body = {
+                newSchedule:newSchedule,
+                oldwSchedule:oldwSchedule
+            }
+            console.log('body');
+            console.log(body);
+            callBack( callBackResponse.callbackWithData(body));
+        }
+    });
+};
+function setData(data){
+    var outPut = [];
+    var arr = ["ward1","ward2","ward3"]
+    var wardCount = 0;
+    for (var key in data[0]){
+      var wardObj ={};
+      var weeklyNurseArr = [];
+      var nurseCount = data[0][arr[wardCount]];
+      for(var dayCount=0;dayCount<7;dayCount++){
+        var randNurseArr = [];
+        var nurseArr = [];
+        for(var randCount=0;randCount<4;randCount++){
+          var nurseObj ={};
+          var x = Math.floor(Math.random() * Math.floor(data[0][key].length));
+          
+          if(randNurseArr.indexOf(x)>-1)
+            randCount--;
+          else{
+           
+            nurseArr.push(data[0][key][x]["nurseId"]);
+           
+            
+            randNurseArr.push(x);
+          }
+          
+        }
+        
+        weeklyNurseArr.push(nurseArr);
+         
+      }
+      wardObj[key] = weeklyNurseArr;
+      outPut.push(wardObj);
+      wardCount++;
+    }
+    console.log(outPut);
+    return(outPut)
+  }
 
 //Update doctor from the database
 module.exports.updatePredictionsByTypeAndAlgirithm = function (body, res, callBack) {

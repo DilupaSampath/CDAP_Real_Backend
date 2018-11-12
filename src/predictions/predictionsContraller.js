@@ -17,6 +17,22 @@ module.exports.newPredictions = function (req, res) {
         }
     })
 };
+/**
+ * Add new Patient to the system
+ * @param {*} req               
+ * @param {*} res 
+ */
+module.exports.getSchedules = function (req, res) {
+    //call add new doctor to the database method
+    service.getSchedules(req.body, res, function (data) {
+        if (data.status) {
+            return response.successWithData(data.data, res);
+        } else {
+            return response.customError(data.data, res);
+        }
+    })
+};
+
 
 /**
  * Remove doctor from the system
